@@ -1,0 +1,1 @@
+0  # Si l'image appartient à la classe 'dirty' (classe 0)

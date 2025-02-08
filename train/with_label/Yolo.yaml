@@ -1,0 +1,39 @@
+# Configuration du modèle pour la classification binaire avec YOLO
+# Architecture basée sur YOLO-nano adaptée pour la classification
+
+train: 'data/train'  # Chemin vers le dossier d'entraînement
+val: 'data/val'  # Chemin vers le dossier de validation
+nc: 2  # Nombre de classes (clean, dirty)
+names: ['clean','dirty']  # Noms des classes
+
+# Backbone configuration (exemple : CSPDarknet nano)
+backbone:
+  - type: CSPDarknet  # Architecture du backbone
+  - depth_multiple: 0.33  # Profondeur ajustée pour YOLO-nano
+  - width_multiple: 0.25  # Largeur ajustée pour YOLO-nano
+  - layers: 
+      - [3, 16, 1, False]  # CSP1
+      - [9, 32, 2, False]  # CSP2
+      - [9, 64, 2, False]  # CSP3
+      - [9, 128, 2, False]  # CSP4
+      - [1, 256, 1, False]  # CSP5
+
+# Classification head configuration
+head:
+  - type: ClassificationHead
+  - in_channels: 256  # Nombre de canaux d'entrée (sortie du dernier CSP)
+  - num_classes: 2    # Nombre de classes (dirty, clean)
+  - global_pool: avg  # Utilisation d'une couche de pooling global
+
+# Hyperparamètres pour l'entraînement
+training:
+  optimizer: SGD  # Optimisateur par défaut (SGD ou Adam)
+  learning_rate: 0.01  # Taux d'apprentissage initial
+  momentum: 0.937  # Moment pour l'optimisateur
+  weight_decay: 0.0005  # Décroissance de poids
+  epochs: 50  # Nombre d'époques par défaut
+  batch_size: 16  # Taille du lot par défaut
+
+
+nc: 2  # Nombre de classes (ici clean et dirty)
+names: ['clean', 'dirty']  # Liste des noms de classes
